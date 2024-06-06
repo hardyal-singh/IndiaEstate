@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 import { errorHandler } from "../utils/error.js";
 
 const signup = async (req, res, next) => {
@@ -23,14 +24,15 @@ const signin = async (req, res, next) => {
   const passwordValid = bcrypt.compareSync(password, validUser.password);
   if (!passwordValid) return next(errorHandler(401, "Invalid Credentials"));
 
+validUser.password=undefined
   const aceess_token = await jwt.sign(
     { id: validUser._id },
     process.env.JWT_SECRET
   );
 
   res
-    .cookie(aceess_token, { expires: new Date(Date.now() + 1) })
-    .status(400)
+    .cookie('access_token', aceess_token)
+    .status(200)
     .json(validUser);
 };
 
