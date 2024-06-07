@@ -8,7 +8,7 @@ import { signInStart, signInSuccess, signInFaliure } from '../redux/user/userSli
 export default function SignOut() {
   const dispatch=useDispatch();
   const selector=useSelector(state=>state.user);
-  const {error, loader}=selector;
+  const {error, loading}=selector;
  
   const [user, setUser]=useState(null);
   
@@ -52,7 +52,7 @@ try {
       <form onSubmit={onsubmit} className='flex flex-col gap-4'>
         <Input type="email" placeholder="Email" name="email" onChange={onchange}/>
         <Input type="password" placeholder="Password" name="password" onChange={onchange}/>
-        <Button text={loader?'loading...':'Sign In'}/>
+        <Button disabled ={loading} text={loading?'loading...':'Sign In'}/>
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Dont have an account?</p>
