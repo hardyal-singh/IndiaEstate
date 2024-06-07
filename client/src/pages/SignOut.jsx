@@ -46,7 +46,7 @@ try {
 
   return (
     <div className='mx-auto p-3 mx-w-lg'>
-      <h1 class="text-3xl text-center font-semibold my-7">Sign Up</h1>
+      <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
       <form onSubmit={onsubmit} className='flex flex-col gap-4'>
         <Input type="text" placeholder="Username" name="username" onChange={onchange} />
         <Input type="email" placeholder="Email" name="email" onChange={onchange}/>

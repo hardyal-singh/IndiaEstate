@@ -2,11 +2,16 @@ import React, { useState } from 'react'
 import Input from "../component/Input.jsx"
 import Button from '../component/Button.jsx';
 import {Link, useNavigate} from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFaliure } from '../redux/user/userSlice.js';
 
 export default function SignOut() {
-  const [error, setError]=useState(null);
+  const dispatch=useDispatch();
+  const selector=useSelector(state=>state.user);
+  const {error, loader}=selector;
+ 
   const [user, setUser]=useState(null);
-  const [loader, setLoader]=useState(null);
+  
 
   const navigate=useNavigate();
 
@@ -17,7 +22,7 @@ const onchange =(e)=>{
 const onsubmit =async(e)=>{
   e.preventDefault();
 try {
-  setLoader(true)
+  dispatch(signInStart());
   const res=await fetch ("/api/auth/signin", {
     method:"POST",
     headers:{
@@ -28,24 +33,22 @@ try {
   const data=await res.json();
   console.log(data);
   if(data.status==false){
-    setError(data.message);
-    setLoader(false);
+    dispatch(signInFaliure(data.message))
     return;
   }
-  setLoader(false);
+  dispatch(signInSuccess(data))
   navigate('/')
   
 
 } catch (error) {
-  setLoader(false);
-  setError(error.message);
+  dispatch(signInFaliure(error.message))
 }
 
 }
 
   return (
     <div className='mx-auto p-3 mx-w-lg sm:w-2/3'>
-      <h1 class="text-3xl text-center font-semibold my-7">Sign In</h1>
+      <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
       <form onSubmit={onsubmit} className='flex flex-col gap-4'>
         <Input type="email" placeholder="Email" name="email" onChange={onchange}/>
         <Input type="password" placeholder="Password" name="password" onChange={onchange}/>
