@@ -4,6 +4,7 @@ import Button from '../component/Button.jsx';
 import {Link, useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFaliure } from '../redux/user/userSlice.js';
+import OAuth from '../component/OAuth.jsx';
 
 export default function SignOut() {
   const dispatch=useDispatch();
@@ -52,7 +53,8 @@ try {
       <form onSubmit={onsubmit} className='flex flex-col gap-4'>
         <Input type="email" placeholder="Email" name="email" onChange={onchange}/>
         <Input type="password" placeholder="Password" name="password" onChange={onchange}/>
-        <Button disabled ={loading} text={loading?'loading...':'Sign In'}/>
+        <Button className="bg-slate-700" disabled = {loading} text={loading?'loading...':'Sign In'}/>
+        <OAuth/>
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Dont have an account?</p>

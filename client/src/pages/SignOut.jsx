@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Input from "../component/Input.jsx"
 import Button from '../component/Button.jsx';
 import {Link, useNavigate} from 'react-router-dom'
+import OAuth from '../component/OAuth.jsx';
 
 export default function SignOut() {
   const [error, setError]=useState(null);
@@ -51,7 +52,8 @@ try {
         <Input type="text" placeholder="Username" name="username" onChange={onchange} />
         <Input type="email" placeholder="Email" name="email" onChange={onchange}/>
         <Input type="password" placeholder="Password" name="password" onChange={onchange}/>
-        <Button text={loader?'loading...':'Sign Up'}/>
+        <Button className="bg-slate-700"  text={loader?'loading...':'Sign Up'}/>
+        <OAuth className="bg-red-700" />
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Have an account?</p>
