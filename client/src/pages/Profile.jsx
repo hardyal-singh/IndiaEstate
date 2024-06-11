@@ -5,21 +5,25 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Input from "../component/Input.jsx";
 import Button from "../component/Button.jsx";
 import { useRef } from "react";
 import { app } from "../firebase.js";
+import { userUpdateFaliure, userUpdateStart, userUpdateSuccess } from "../redux/user/userSlice.js";
+
 
 export default function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, error, loading} = useSelector((state) => state.user);
+  const dispatch=useDispatch();
   const fileRef = useRef();
   const [file, setFile] = useState(null);
   const [fileUploadPresentage, setFileUploadPresentage] = useState(null);
   const [fileUplaodError, setFileUploadError] = useState(null);
   const [formData, setFormData] = useState({});
+  const [upadatedSuccessfully, setUpdateSuccessfully] = useState(false)
 
-  console.log(formData);
+  //important: this is for firbase functionality 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const metadata = {
@@ -73,15 +77,62 @@ export default function Profile() {
     );
   };
 
+ // for form data state regular update
+  const handleChange=(e)=>{
+    const name=e.target.name;
+    const value=e.target.value;
+    setFormData((pre)=>({...pre, [name]:value}))
+  }
+  
+  //for update user data with avatar 
+  const handleUpdate=async(e)=>{
+    e.preventDefault();
+    try {
+        dispatch(userUpdateStart());
+      const res=await fetch(`/api/user/update/${currentUser._id}`,
+        {method:"POST",
+          headers:{'content-type':'application/json'},
+          body:JSON.stringify(formData)
+        }
+      )
+
+      const data=await res.json();
+      console.log(data);
+      if(data.success===false){
+       dispatch(userUpdateFaliure(data.message))
+      }
+      dispatch(userUpdateSuccess(data))
+      setUpdateSuccessfully(true)
+    } catch (error) {
+      dispatch(userUpdateFaliure(error.message))
+    }
+  }
+
+  // below we use useEffect functions-------------------------
+
+  //for upload image on firebase and get download url
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
     }
   }, [file]);
+
+  //using this is funtion we can convert useState in intial value
+  useEffect(()=>{
+    const timeout= setTimeout(()=>{
+      setUpdateSuccessfully(false);
+      if(fileUploadPresentage==100){
+        setFileUploadPresentage(null)
+      }
+    }, 3000)
+
+    return ()=>clearTimeout(timeout)
+  }, [upadatedSuccessfully, fileUploadPresentage])
+
   return (
     <div className="sm:w-1/2 mx-auto">
       <h1 className="text-center font-semibold text-3xl my-7 ">Profile</h1>
-      <form className="flex flex-col gap-4  justify-center align-centen h-full ">
+      <form onSubmit={handleUpdate} className="flex flex-col gap-4  justify-center align-centen h-full ">
         <input
           type="file"
           ref={fileRef}
@@ -110,20 +161,25 @@ export default function Profile() {
           placeholder="Username"
           name="username"
           defaultValue={currentUser.username}
+          onChange={handleChange}
         />
         <Input
           type="email"
           placeholder="Email"
           name="email"
           defaultValue={currentUser.email}
+          onChange={handleChange}
         />
-        <Input type="password" placeholder="Password" name="password" />
-        <Button type="submit" text="Update" className="bg-green-700" />
+        <Input type="password" placeholder="Password" name="password"  onChange={handleChange}/>
+        <Button type="submit" text={loading?'Loading':"Update"} className="bg-green-700"  />
       </form>
       <div className="flex justify-between mt-5">
         <spna className="text-red-600 cursor-pointer ">Delete Account</spna>
         <spna className="text-red-600 cursor-pointer ">Sign Out</spna>
       </div>
+      {
+        upadatedSuccessfully? <p className="text-green-700">User update successfully</p>:(error?<p className="text-red-500">{error}</p>:'')
+      }
     </div>
   );
 }
