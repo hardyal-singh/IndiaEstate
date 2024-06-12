@@ -98,12 +98,14 @@ export default function Profile() {
 
       const data=await res.json();
       console.log(data);
-      if(data.success===false){
+      if(data.status===false){
        dispatch(userUpdateFaliure(data.message))
+      }else{
+        dispatch(userUpdateSuccess(data))
+        setUpdateSuccessfully(true)
       }
-      dispatch(userUpdateSuccess(data))
-      setUpdateSuccessfully(true)
-    } catch (error) {
+    } 
+    catch (error) {
       dispatch(userUpdateFaliure(error.message))
     }
   }
