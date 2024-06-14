@@ -134,8 +134,26 @@ export default function Profile() {
       dispatch(userDeleteFaliure(error.message));
     }
   };
-  // below we use useEffect functions-------------------------
 
+  //signout user
+  const handleSignout = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`/api/auth/signout`);
+      const data = await res.json();
+      console.log(data);
+      if (data.status === false) {
+        dispatch(userDeleteFaliure(data.message));
+        return;
+      }
+      dispatch(userDeleteSuccess(data.message));
+    } catch (error) {
+      console.log(error);
+      dispatch(userDeleteFaliure(error.message));
+    }
+  };
+
+  // below we use useEffect functions-------------------------
   //for upload image on firebase and get download url
   useEffect(() => {
     if (file) {
@@ -215,7 +233,9 @@ export default function Profile() {
         <spna className="text-red-600 cursor-pointer" onClick={handleDelete}>
           Delete Account
         </spna>
-        <spna className="text-red-600 cursor-pointer ">Sign Out</spna>
+        <spna className="text-red-600 cursor-pointer " onClick={handleSignout}>
+          Sign Out
+        </spna>
       </div>
       {upadatedSuccessfully ? (
         <p className="text-green-700">User update successfully</p>
