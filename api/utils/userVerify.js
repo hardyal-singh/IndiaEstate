@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import {errorHandler} from './error.js'
+import { errorHandler } from "./error.js";
 
 const userVerify = async (req, res, next) => {
   const { access_token } = req.cookies;
@@ -8,6 +8,9 @@ const userVerify = async (req, res, next) => {
     return next(errorHandler(404, "Unauthetized access token"));
 
   const user = await jwt.verify(access_token, process.env.JWT_SECRET);
+
+  if (!user) return next(errorHandler(404, "User not valid"));
+
   req.user = user;
   next();
 };
