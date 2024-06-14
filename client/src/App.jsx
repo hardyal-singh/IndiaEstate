@@ -1,6 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, SignIn, SignOut, About, Profile } from "./pages/index.js";
+import {
+  Home,
+  SignIn,
+  SignOut,
+  About,
+  Profile,
+  CreateListing,
+} from "./pages/index.js";
 import Header from "./component/Header.jsx";
 import PrivateRouter from "./component/PrivateRouter.jsx";
 export default function App() {
@@ -14,6 +21,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route element={<PrivateRouter />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/create-listing" element={<CreateListing />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,7 +1,12 @@
-import React from 'react'
+import React from "react";
 
-export default function Input({type, placeholder,...ref}) {
+export default function Input({ type, placeholder, className, ...ref }) {
   return (
-    <input type={type} placeholder={placeholder} {...ref} className='border p-3 rounded-lg'/>
-  )
+    <input
+      type={type}
+      placeholder={placeholder}
+      {...ref}
+      className={`border p-3 rounded-lg ${className}`}
+    />
+  );
 }

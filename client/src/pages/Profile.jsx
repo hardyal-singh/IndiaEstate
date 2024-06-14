@@ -18,6 +18,7 @@ import {
   userDeleteStart,
   userDeleteSuccess,
 } from "../redux/user/userSlice.js";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
   const { currentUser, error, loading } = useSelector((state) => state.user);
@@ -228,6 +229,7 @@ export default function Profile() {
           text={loading ? "Loading" : "Update"}
           className="bg-green-700"
         />
+       <Link className="text-green-700 uppercase text-center">Create List</Link>
       </form>
       <div className="flex justify-between mt-5">
         <spna className="text-red-600 cursor-pointer" onClick={handleDelete}>
