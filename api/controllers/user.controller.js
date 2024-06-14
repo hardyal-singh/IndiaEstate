@@ -40,4 +40,23 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-export { test, updateUser };
+//@DELETE : delete user account
+const deleteUser = async (req, res, next) => {
+  const { _id } = req.params;
+  const { id } = req.user;
+  try {
+    if (_id !== id)
+      return next(errorHandler(400, "You can delete only your own account"));
+
+    const data = await User.findByIdAndDelete(id);
+    if (!res) return next(res);
+    res
+      .status(200)
+      .json({ message: "User deleted successfully" })
+      .clearCookie("access_token");
+    console.log(res.message);
+  } catch (error) {
+    next(error);
+  }
+};
+export { test, updateUser, deleteUser };
