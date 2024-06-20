@@ -168,7 +168,7 @@ export default function CreateListing() {
           ) : null}
           {formData.imageUrls.length > 0 &&
             formData.imageUrls.map((imageUrl, index) => (
-              <div className="flex justify-between border rounded-lg p-1 hover:bg-orange-200">
+              <div className="flex justify-between border rounded-lg p-1 hover:bg-orange-100">
                 <img
                   src={imageUrl}
                   alt="listing image"
@@ -177,7 +177,8 @@ export default function CreateListing() {
                 <Button
                   type="button"
                   text="DELETE"
-                  className="bg-transparent text-red-900 font-semibold"
+                  textColor="text-red-700"
+                  className="font-semibold"
                   onClick={() => deleteImage(index)}
                 />
               </div>
