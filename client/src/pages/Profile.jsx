@@ -229,7 +229,12 @@ export default function Profile() {
           text={loading ? "Loading" : "Update"}
           className="bg-green-700"
         />
-       <Link className="text-green-700 uppercase text-center">Create List</Link>
+        <Link
+          to={"/create-listing"}
+          className="uppercase text-center bg-slate-700 p-3 rounded-xl text-white"
+        >
+          Create List
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
         <spna className="text-red-600 cursor-pointer" onClick={handleDelete}>
