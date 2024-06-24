@@ -1,6 +1,7 @@
 import { text } from "express";
 import { userVerify } from "../utils/userVerify.js";
 import { errorHandler } from "../utils/error.js";
+import Listing from "../models/listing.model.js";
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 
@@ -59,4 +60,18 @@ const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
-export { test, updateUser, deleteUser };
+
+//@GET : get user listings
+const getUserListings = async (req, res, next) => {
+  try {
+    if (req.user.id === req.params._id) {
+      const listings = await Listing.find({ userRef: req.params._id });
+      res.status(200).json(listings);
+    } else {
+      return next(errorHandler(500, "Listing not found"));
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+export { test, updateUser, deleteUser, getUserListings };
