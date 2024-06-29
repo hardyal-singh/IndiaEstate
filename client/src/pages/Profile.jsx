@@ -19,6 +19,7 @@ import {
   userDeleteSuccess,
 } from "../redux/user/userSlice.js";
 import { Link } from "react-router-dom";
+import { current } from "@reduxjs/toolkit";
 
 export default function Profile() {
   const { currentUser, error, loading } = useSelector((state) => state.user);
@@ -29,6 +30,9 @@ export default function Profile() {
   const [fileUplaodError, setFileUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [upadatedSuccessfully, setUpdateSuccessfully] = useState(false);
+  const [getUserListingsError, setGetuserListingsError] = useState(false);
+  const [getUserListings, setGetUserListings] = useState([]);
+  console.log(getUserListings);
 
   //important: this is for firbase functionality
   const handleFileUpload = (file) => {
@@ -154,6 +158,19 @@ export default function Profile() {
     }
   };
 
+  //getUserListing
+  const handleGetUserListings = async (e) => {
+    try {
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.status === false) return setGetuserListingsError(data.message);
+
+      setGetUserListings(data);
+    } catch (error) {
+      setGetuserListingsError(error.message);
+    }
+  };
+
   // below we use useEffect functions-------------------------
   //for upload image on firebase and get download url
   useEffect(() => {
@@ -250,6 +267,38 @@ export default function Profile() {
         <p className="text-red-500">{error}</p>
       ) : (
         ""
+      )}
+      <button onClick={handleGetUserListings} className="text-green-500 ">
+        Show all listings
+      </button>
+      <h1 className="text-3xl text-center font-bold">Your Listings</h1>
+      {getUserListings.length > 0 ? (
+        getUserListings.map((listing) => (
+          <div className="flex felx-row justify-between border rounded-md p-1 items-center mt-3 last:mb-5">
+            <div className="flex flex-row gap-3 items-center">
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  className="w-20 h-20"
+                  src={listing.imageUrls[0]}
+                  alt="image"
+                ></img>
+              </Link>
+              <Link to={`/listing/${listing._id}`}>
+                <h1>{listing.name}</h1>
+              </Link>
+            </div>
+            <div className="flex flex-col">
+              <button type="button" className="font-semibold text-green-600">
+                Edit
+              </button>
+              <button type="button" className="font-semibold text-red-700">
+                Delete
+              </button>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p>{getUserListingsError}</p>
       )}
     </div>
   );
