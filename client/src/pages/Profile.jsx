@@ -171,6 +171,25 @@ export default function Profile() {
     }
   };
 
+
+//deleteUserListing 
+const handleDeleteUserListing= async (listingId) =>{
+  try {
+    const res= await fetch(`/api/listing/delete/${listingId}`,{
+      method:"DELETE"
+    })
+
+    if(res.status !==false) {
+      const data=await res.json();
+      console.log(data);
+      setGetUserListings((pre)=>(
+        pre.filter((listing)=>listing._id !==listingId)
+      ))
+    }
+  } catch (error) {
+    console.log(error.message)
+  }
+}
   // below we use useEffect functions-------------------------
   //for upload image on firebase and get download url
   useEffect(() => {
@@ -291,7 +310,7 @@ export default function Profile() {
               <button type="button" className="font-semibold text-green-600">
                 Edit
               </button>
-              <button type="button" className="font-semibold text-red-700">
+              <button type="button" className="font-semibold text-red-700" onClick={()=>handleDeleteUserListing(listing._id)}>
                 Delete
               </button>
             </div>

@@ -1,4 +1,5 @@
 import Listing from "../models/listing.model.js";
+import { errorHandler } from "../utils/error.js";
 
 const createListing = async (req, res, next) => {
   try {
@@ -7,6 +8,20 @@ const createListing = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};      
+};    
 
-export { createListing };
+
+const deleteListing = async (req, res, next) =>{
+ const listing = await Listing.findById(req.params._id);
+ if(!listing ) return next(errorHandler(404, "Listing not found"));
+
+if(req.user.id !==listing.userRef) return next(errorHandler(401,"You can delete your own listing."))
+
+const result= await Listing.findByIdAndDelete(req.params._id)
+console.log(result)
+
+if(!result) return next (errorHandler(500, "failed to delete listing"))
+  return res.status(200).json({message:"Listing deleted successfully."})
+}
+
+export { createListing, deleteListing};
