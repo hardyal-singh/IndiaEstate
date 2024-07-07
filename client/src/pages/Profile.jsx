@@ -272,12 +272,12 @@ export default function Profile() {
         </Link>
       </form>
       <div className="flex justify-between mt-5">
-        <spna className="text-red-600 cursor-pointer" onClick={handleDelete}>
+        <span className="text-red-600 cursor-pointer" onClick={handleDelete}>
           Delete Account
-        </spna>
-        <spna className="text-red-600 cursor-pointer " onClick={handleSignout}>
+        </span>
+        <span className="text-red-600 cursor-pointer " onClick={handleSignout}>
           Sign Out
-        </spna>
+        </span>
       </div>
       {upadatedSuccessfully ? (
         <p className="text-green-700">User update successfully</p>

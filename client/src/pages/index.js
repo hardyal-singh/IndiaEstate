@@ -4,6 +4,16 @@ import Profile from "./Profile.jsx";
 import SignIn from "./SignIn.jsx";
 import SignOut from "./SignOut.jsx";
 import CreateListing from "./CreateListing.jsx";
-import UpdateListing from './UpdateListing.jsx'
+import UpdateListing from "./UpdateListing.jsx";
+import Listing from "./Listing.jsx";
 
-export { About, Home, Profile, SignIn, SignOut, CreateListing, UpdateListing };
+export {
+  About,
+  Home,
+  Profile,
+  SignIn,
+  SignOut,
+  CreateListing,
+  UpdateListing,
+  Listing,
+};
