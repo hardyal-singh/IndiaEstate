@@ -74,4 +74,17 @@ const getUserListings = async (req, res, next) => {
     next(error);
   }
 };
-export { test, updateUser, deleteUser, getUserListings };
+
+const getUser = async (req, res, next) => {
+  const { _id } = req.params;
+
+  try {
+    const user = await User.findById(_id);
+    if (!user) return next(errorHandler(500, "User not found"));
+    user.password = undefined;
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+export { test, updateUser, deleteUser, getUserListings, getUser };
